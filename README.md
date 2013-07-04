@@ -41,7 +41,7 @@ var frameTransceiver = new FrameTransceiver('root', function(frameMessage)
 });
 ```
 
-In one child we reload and/or redraw a graph on data submission:
+In one child frame we reload and/or redraw a graph on data submission:
 
 ```javascript
 var frameTransceiver = new FrameTransceiver('child_1', function(frameMessage)
@@ -55,15 +55,14 @@ var frameTransceiver = new FrameTransceiver('child_1', function(frameMessage)
 });
 ```
 
-In another child we handle data form submission
+In another child frame we handle data form submission
 
 ```javascript
 $(document).ready(function()
 {
-  window.frameTransceiver = new FrameTransceiver('box', function(frameMessage)
+  window.frameTransceiver = new FrameTransceiver('child_2', function(frameMessage)
   {
-    var message = frameMessage.payload;
-    // we handle sending click ignore all messages
+    // we ignore all messages ... we just send submitted data from this frame
   });
 });
 
@@ -75,7 +74,7 @@ function handleSubmit()
   sendDataToServer(formData);
   // tell the graph to update
   var message = new FrameMessage(new YumaCaseRatingEvent('submission', formData));
-  that.frameTransceiver.broadcast(message);
+  window.frameTransceiver.broadcast(message);
 }
 
 // still somewhere else
